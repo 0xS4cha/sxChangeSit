@@ -1,6 +1,5 @@
-
 Citizen.CreateThread(function()
-	local init_starting <const> = os.time()
+	local init_starting <const> = GetGameTimer()
 	local init_time
 	for i = 1, #_CONFIG.Keys do
 		local key = _CONFIG.Keys[i]
@@ -17,12 +16,12 @@ Citizen.CreateThread(function()
 				local speedLimit = key.speedLimit or 150 
 				if currentSpeed > speedLimit then return end
 				
-				if (IsVehicleSeatFree(pVeh, key.sitIndex) and GetPedInVehicleSeat(pVeh, -1) ~= pPed) then
+				if (IsVehicleSeatFree(pVeh, key.sitIndex) and (_CONFIG.BlockDriver and GetPedInVehicleSeat(pVeh, -1) ~= pPed)) then
 					SetPedIntoVehicle(pPed, pVeh, key.sitIndex)
 				end
 			end
 		})
 	end
-	init_time = os.time() - init_starting
+	init_time = GetGameTimer() - init_starting
 	Logger:trace('sxChangesit', ("init in %sms"):format(init_time))
 end)
