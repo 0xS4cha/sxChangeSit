@@ -9,9 +9,14 @@ Citizen.CreateThread(function()
 			description = GetPhrase(key.label),
 			defaultKey = key.keyId,
 			onPressed = function()
-				local pPed, pVeh = PlayerPedId(), GetVehiclePedIsIn(pPed, false)
+				local pPed = PlayerPedId()
+				local pVeh = GetVehiclePedIsIn(pPed, false)
 				if pVeh == 0 then return end
-				if UpdateOnscreenKeyboard() ~= 0 then return end
+				
+				local currentSpeed = GetEntitySpeed(pVeh) * 3.6 
+				local speedLimit = key.speedLimit or 150 
+				if currentSpeed > speedLimit then return end
+				
 				if (IsVehicleSeatFree(pVeh, key.sitIndex) and GetPedInVehicleSeat(pVeh, -1) ~= pPed) then
 					SetPedIntoVehicle(pPed, pVeh, key.sitIndex)
 				end
